@@ -14,7 +14,6 @@ blocks:
         - name: make lint
           commands:
             - echo "lint your code"
-    dependencies: []
   - name: Unit tests
     task:
       prologue:
@@ -30,12 +29,9 @@ blocks:
         - name: Unit tests 3/3
           commands:
             - echo "run 3/3"
-    dependencies:
-      - Lint
-  - name: build app
-    dependencies:
-      - Unit tests
+  - name: take screenshorts
     task:
       jobs:
         - name: 'Job #1'
-          commands: []
+          commands:
+            - bundle exec fastlane screenshots
