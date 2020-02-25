@@ -34,4 +34,10 @@ blocks:
       jobs:
         - name: 'Job #1'
           commands:
-            - bundle exec fastlane screenshots
+            - '- bundle exec xcversion select 11.3'
+        - name: 'Job #2'
+          commands:
+            - '- bundle exec fastlane screenshots'
+        - name: 'Job #3'
+          commands:
+            - ' - artifact push job screenshots'
