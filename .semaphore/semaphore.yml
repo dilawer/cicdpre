@@ -26,3 +26,8 @@ blocks:
         - name: Unit tests 3/3
           commands:
             - echo "run 3/3"
+  - name: 'Block #2'
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands: []
