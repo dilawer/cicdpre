@@ -19,7 +19,25 @@ blocks:
       prologue:
         commands:
           - checkout
+          # Restore dependencies from the cache. This command will not fail in
+          # case of a cache miss. In case of a cache hit, bundle  install will
+          # complete in about a second.
+          # See https://docs.semaphoreci.com/article/68-caching-dependencies
+          - cache restore
+          - bundle install --path vendor/bundle
+          - cache store
+          
       jobs:
+             - name: Test
+               commands:
+                 # Select an Xcode version.
+                 # See https://docs.semaphoreci.com/article/161-macos-mojave-xcode-10-image and
+                 # https://docs.semaphoreci.com/article/162-macos-mojave-xcode-11-image
+                 - bundle exec xcversion select 11.3
+
+                 # Run tests of iOS and Mac app on a simulator or connected device.
+                 # See https://docs.fastlane.tools/actions/scan/
+                 - bundle exec fastlane test
         - name: Unit tests 1/3
           commands:
             - echo "run 1/3"
@@ -29,8 +47,62 @@ blocks:
         - name: Unit tests 3/3
           commands:
             - echo "run 3/3"
+            
   - name: 'Block #3'
     task:
       jobs:
         - name: 'Job #1'
           commands: []
+
+    
+ - name: Build app
+   task:
+     env_vars:
+       - name: LANG
+         value: en_US.UTF-8
+     secrets:
+       # Make the SSH key for the certificate repository and the MATCH_PASSWORD
+       # environment variable available.
+       # See https://docs.semaphoreci.com/article/109-using-private-dependencies
+       - name: match-secrets
+     prologue:
+       commands:
+         # Add the key for the match certificate repository to ssh
+         # See https://docs.semaphoreci.com/article/109-using-private-dependencies
+         - chmod 0600 ~/.ssh/*
+         # Add the key to the ssh agent:
+         - ssh-add ~/.ssh/*
+         # Continue with checkout as normal
+         - checkout
+         - cache restore
+         - bundle install --path vendor/bundle
+         - cache store
+     jobs:
+       - name: Build
+         commands:
+           - bundle exec xcversion select 11.3
+           - bundle exec fastlane build
+
+           # Upload the IPA file as a job artifact.
+           # See https://docs.semaphoreci.com/article/155-artifacts
+           - artifact push job build/TallestTowers.ipa
+ - name: Take screenshots
+   task:
+     env_vars:
+       - name: LANG
+         value: en_US.UTF-8
+     prologue:
+       commands:
+         - checkout
+         - cache restore
+         - bundle install --path vendor/bundle
+         - cache store
+     jobs:
+       - name: Screenshots
+         commands:
+           - bundle exec xcversion select 11.3
+           - bundle exec fastlane screenshots
+
+           # Upload the screenshots directory as a project artifact.
+           # See https://docs.semaphoreci.com/article/155-artifacts
+           - artifact push job screenshots
