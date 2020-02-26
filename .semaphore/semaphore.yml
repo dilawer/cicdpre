@@ -10,26 +10,18 @@ blocks:
       prologue:
         commands:
           - checkout
+          - cache restore
+          - bundle install --path vendor/bundle
+          - cache store
       jobs:
         - name: make lint
           commands:
             - echo "lint your code"
   - name: Unit tests
     task:
-      prologue:
-        commands:
-          - checkout
-          # Restore dependencies from the cache. This command will not fail in
-          # case of a cache miss. In case of a cache hit, bundle  install will
-          # complete in about a second.
-          # See https://docs.semaphoreci.com/article/68-caching-dependencies
-          - cache restore
-          - bundle install --path vendor/bundle
-          - cache store
-          
       jobs:
-             - name: Test
-               commands:
+        - name: Test
+        commands:
                  # Select an Xcode version.
                  # See https://docs.semaphoreci.com/article/161-macos-mojave-xcode-10-image and
                  # https://docs.semaphoreci.com/article/162-macos-mojave-xcode-11-image
