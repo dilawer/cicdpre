@@ -17,7 +17,6 @@ blocks:
         - name: make lint
           commands:
             - echo "lint your code"
-      jobs:
   			- name: Unit tests
    					 task:
         - name: Unit tests 1/3
