@@ -32,3 +32,6 @@ blocks:
         - name: 'Job #1'
           commands:
             - echo "lint your code"
+        - name: 'Job #2'
+          commands:
+            - echo "run 1/3"
