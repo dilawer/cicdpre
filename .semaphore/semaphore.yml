@@ -17,21 +17,35 @@ blocks:
         - name: make lint
           commands:
             - echo "lint your code"
-        - name: Unit tests 1/3
-          commands:
-            - echo "run 1/3"
         - name: Unit tests 2/3
           commands:
             - echo "run 2/3"
-        - name: Unit tests 3/3
-          commands:
-            - echo "run 3/3"
-  - name: 'Block #2'
+  - name: unit test
     task:
       jobs:
         - name: 'Job #1'
           commands:
-            - echo "lint your code"
+            - echo "run 1/3"
         - name: 'Job #2'
           commands:
             - echo "run 1/3"
+  - name: checkout
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - checkout
+            - cache restore
+            - bundle install --path vendor/bundle
+            - cache store
+        - name: 'Job #2'
+          commands:
+            - bundle exec xcversion select 11.2.1
+            - bundle exec fastlane build
+  - name: build on xcode
+    task:
+      jobs:
+        - name: 'Job #1'
+          commands:
+            - bundle exec xcversion select 11.3
+            - bundle exec fastlane screenshots
