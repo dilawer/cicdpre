@@ -47,7 +47,6 @@ blocks:
             - cache store
         - name: make ipa file
           commands:
-            - bundle exec xcversion select 11.3(11C29)
             - 'bundle exec fastlane build '
             - artifact push job build/CICD.ipa
     dependencies:
