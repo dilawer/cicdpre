@@ -47,10 +47,11 @@ blocks:
             - cache store
         - name: make ipa file
           commands:
-            - bundle exec xcversion select 11.3
+            - bundle exec xcversion select 11.3(11C29)
             - 'bundle exec fastlane build '
             - artifact push job build/CICD.ipa
-    dependencies: []
+    dependencies:
+      - unit test
   - name: build on xcode
     task:
       jobs:
@@ -69,4 +70,4 @@ blocks:
         - name: LANG
           value: en_US.UTF-8
     dependencies:
-      - unit test
+      - checkout
