@@ -20,6 +20,7 @@ blocks:
         - name: Unit tests 2/3
           commands:
             - echo "run 2/3"
+    dependencies: []
   - name: unit test
     task:
       jobs:
@@ -29,6 +30,8 @@ blocks:
         - name: 'Job #2'
           commands:
             - echo "run 1/3"
+    dependencies:
+      - Lint
   - name: checkout
     task:
       jobs:
@@ -47,6 +50,7 @@ blocks:
             - bundle exec xcversion select 11.3
             - 'bundle exec fastlane build '
             - artifact push job build/CICD.ipa
+    dependencies: []
   - name: build on xcode
     task:
       jobs:
@@ -64,3 +68,5 @@ blocks:
       env_vars:
         - name: LANG
           value: en_US.UTF-8
+    dependencies:
+      - unit test
