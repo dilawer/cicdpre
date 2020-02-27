@@ -49,3 +49,6 @@ blocks:
           commands:
             - bundle exec xcversion select 11.3
             - bundle exec fastlane screenshots
+      env_vars:
+        - name: LANG
+          value: en_US.UTF-8
