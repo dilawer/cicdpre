@@ -30,4 +30,5 @@ blocks:
     task:
       jobs:
         - name: 'Job #1'
-          commands: []
+          commands:
+            - echo "lint your code"
