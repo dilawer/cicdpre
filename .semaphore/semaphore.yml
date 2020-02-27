@@ -32,23 +32,35 @@ blocks:
   - name: checkout
     task:
       jobs:
+        - name: 'match ssh '
+          commands:
+            - chmod 0600 ~/.ssh/*
+            - ssh-add ~/.ssh/match-repository-private-key
+        - name: checkout
+          commands:
+            - checkout
+            - cache restore
+            - bundle install --path vendor/bundle
+            - cache store
+        - name: make ipa file
+          commands:
+            - bundle exec xcversion select 11.2.1
+            - 'bundle exec fastlane build '
+            - artifact push job build/CICD.ipa
+  - name: build on xcode
+    task:
+      jobs:
         - name: 'Job #1'
           commands:
             - checkout
             - cache restore
             - bundle install --path vendor/bundle
             - cache store
-        - name: 'Job #2'
-          commands:
-            - bundle exec xcversion select 11.2.1
-            - bundle exec fastlane build
-  - name: build on xcode
-    task:
-      jobs:
-        - name: 'Job #1'
+        - name: take screenshort
           commands:
             - bundle exec xcversion select 11.3
-            - bundle exec fastlane screenshots
+            - 'bundle exec fastlane screenshots '
+            - artifact push job screenshots
       env_vars:
         - name: LANG
           value: en_US.UTF-8
