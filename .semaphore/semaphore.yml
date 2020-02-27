@@ -48,7 +48,7 @@ blocks:
         - name: make ipa file
           commands:
             - xcversion select 11.3
-            - 'bundle exec fastlane build '
+            - 'fastlane build '
             - artifact push job build/CICD.ipa
     dependencies:
       - unit test
